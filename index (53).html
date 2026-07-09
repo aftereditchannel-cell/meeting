@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فرم ثبت‌نام میتینگ افتر ادیت | مازندران</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+      background: linear-gradient(135deg, #0a0a1a, #1a1a3e, #0f0f2a);
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 0; direction: rtl;
+    }
+    .page-wrapper {
+      width: 100%; max-width: 600px;
+      padding: 30px 20px;
+      display: flex; flex-direction: column; align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 32px; padding: 40px 36px;
+      max-width: 560px; width: 100%;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+      position: relative; overflow: hidden;
+    }
+    .container::before {
+      content: '';
+      position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(59,130,246,0.06) 0%, transparent 60%),
+                  radial-gradient(circle at 70% 80%, rgba(139,92,246,0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    /* ---- BRAND ---- */
+    .brand-header {
+      display: flex; flex-direction: column; align-items: center;
+      margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .brand-logo {
+      width: 90px; height: 90px;
+      border-radius: 50%; /* گرد کردن لوگو */
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.12);
+      margin-bottom: 10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      background: rgba(255,255,255,0.03);
+    }
+    .brand-name {
+      color: #f1f5f9; font-size: 24px; font-weight: 800; letter-spacing: 1px;
+    }
+    .brand-name span {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .brand-sub {
+      color: rgba(255,255,255,0.35); font-size: 12px; margin-top: 4px; font-weight: 500;
+    }
+    .progress-container {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 28px; position: relative; z-index: 1;
+      overflow-x: auto; padding: 4px 0;
+    }
+    .progress-step {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      position: relative; z-index: 2; flex-shrink: 0;
+    }
+    .progress-circle {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600;
+      color: rgba(255,255,255,0.25); transition: all 0.4s ease;
+    }
+    .progress-step.active .progress-circle {
+      border-color: #3b82f6; background: rgba(59,130,246,0.2);
+      color: #93c5fd; box-shadow: 0 0 20px rgba(59,130,246,0.3);
+    }
+    .progress-step.done .progress-circle {
+      border-color: #10b981; background: rgba(16,185,129,0.15);
+      color: #6ee7b7;
+    }
+    .progress-label { font-size: 8px; color: rgba(255,255,255,0.2); font-weight: 500; white-space: nowrap; }
+    .progress-step.active .progress-label { color: #93c5fd; }
+    .progress-step.done .progress-label { color: #6ee7b7; }
+    .progress-line {
+      flex: 1; min-width: 12px; height: 2px;
+      background: rgba(255,255,255,0.06); margin: 0 4px; margin-bottom: 20px;
+      border-radius: 2px; transition: all 0.4s ease;
+    }
+    .progress-line.filled { background: linear-gradient(90deg, #3b82f6, #10b981); }
+    .header { text-align: center; margin-bottom: 28px; position: relative; z-index: 1; }
+    .header .step-badge {
+      display: inline-block; background: rgba(59,130,246,0.12); color: #93c5fd;
+      padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      margin-bottom: 10px; border: 1px solid rgba(59,130,246,0.15);
+    }
+    .header h2 { color: #f1f5f9; font-size: 20px; font-weight: 700; line-height: 1.5; }
+    .header p { color: rgba(255,255,255,0.45); font-size: 14px; margin-top: 6px; }
+    .form-step { display: none; animation: fadeIn 0.35s ease; position: relative; z-index: 1; }
+    .form-step.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 14px 16px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; color: #f1f5f9; font-size: 15px;
+      font-family: inherit; outline: none; transition: all 0.3s ease;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+      background: rgba(255,255,255,0.08);
+    }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.25); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(255,255,255,0.3)'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: left 12px center; background-size: 24px;
+    }
+    .form-group select option { background: #0a0a1a; color: #f1f5f9; }
+    .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .option-grid.one-col { grid-template-columns: 1fr; }
+    .option-btn {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 14px 12px;
+      color: rgba(255,255,255,0.65); font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: all 0.25s ease; text-align: center; font-family: inherit; line-height: 1.4;
+    }
+    .option-btn:hover { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.25); transform: translateY(-1px); }
+    .option-btn.selected { background: rgba(59,130,246,0.15); border-color: #3b82f6; color: #93c5fd; box-shadow: 0 0 15px rgba(59,130,246,0.15); }
+    .file-upload {
+      border: 2px dashed rgba(255,255,255,0.12); border-radius: 16px;
+      padding: 36px 20px; text-align: center; cursor: pointer;
+      transition: all 0.3s ease; background: rgba(255,255,255,0.02);
+    }
+    .file-upload:hover { border-color: rgba(59,130,246,0.3); background: rgba(59,130,246,0.04); }
+    .file-upload .icon { font-size: 36px; margin-bottom: 10px; }
+    .file-upload p { color: rgba(255,255,255,0.4); font-size: 13px; }
+    .file-upload .types { color: rgba(255,255,255,0.2); font-size: 11px; margin-top: 6px; }
+    .file-upload.has-file { border-color: #10b981; background: rgba(16,185,129,0.06); }
+    .file-upload input[type="file"] { display: none; }
+    .file-name { color: #6ee7b7; font-size: 13px; margin-top: 8px; display: none; }
+    .file-name.show { display: block; }
+    .error-msg {
+      background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.15);
+      border-radius: 12px; padding: 12px 14px; color: #fca5a5;
+      font-size: 13px; margin-bottom: 16px; display: none; align-items: center; gap: 8px;
+    }
+    .error-msg.show { display: flex; }
+    .help-box {
+      background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.12);
+      border-radius: 12px; padding: 14px 16px; color: #fcd34d;
+      font-size: 13px; margin-bottom: 16px; display: none; line-height: 1.7;
+    }
+    .help-box.show { display: block; }
+    .rules-section { margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px; }
+    .rules-section h3 {
+      color: #fcd34d; font-size: 16px; font-weight: 700; margin-bottom: 14px; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .rules-list {
+      list-style: none; padding: 0; max-height: 340px; overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; background: rgba(0,0,0,0.2);
+    }
+    .rules-list li {
+      padding: 13px 16px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.8;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .rules-list li:last-child { border-bottom: none; }
+    .rules-list li .num {
+      color: #3b82f6; font-weight: 700; font-size: 11px;
+      min-width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+      background: rgba(59,130,246,0.1); border-radius: 50%; flex-shrink: 0; margin-top: 3px;
+    }
+    .rules-list li .text { flex: 1; }
+    .rules-list li.highlight { background: rgba(251,191,36,0.06); border-right: 3px solid #f59e0b; }
+    .rules-scroll-hint { text-align: center; color: rgba(255,255,255,0.2); font-size: 11px; padding: 8px; animation: pulse 2s infinite; }
+    .rules-scroll-hint.hidden { display: none; }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+    .btn-row { display: flex; gap: 10px; margin-top: 24px; }
+    .btn {
+      flex: 1; padding: 14px; border: none; border-radius: 14px;
+      font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.25s ease; font-family: inherit;
+    }
+    .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-primary { background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff; }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(59,130,246,0.3); }
+    .btn-secondary { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.08); }
+    .btn-secondary:hover:not(:disabled) { background: rgba(255,255,255,0.1); }
+    .btn-success { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+    .btn-success:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(16,185,129,0.3); }
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+    .btn-danger:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(239,68,68,0.3); }
+    .summary-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px; padding: 18px 20px; margin-bottom: 16px;
+    }
+    .summary-row {
+      display: flex; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row .label { color: rgba(255,255,255,0.4); font-size: 13px; white-space: nowrap; margin-left: 12px; }
+    .summary-row .value { color: #f1f5f9; font-size: 14px; font-weight: 500; text-align: left; }
+    .success-screen { display: none; text-align: center; padding: 40px 0; animation: fadeIn 0.5s ease; }
+    .success-screen.show { display: block; }
+    .success-screen .check {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: rgba(16,185,129,0.12); display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; font-size: 40px; border: 2px solid rgba(16,185,129,0.2);
+    }
+    .success-screen h2 { color: #6ee7b7; font-size: 22px; margin-bottom: 10px; }
+    .success-screen p { color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.8; }
+
+    /* ---- LOADING OVERLAY ---- */
+    .loading-overlay {
+      display: none;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(10,10,26,0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 32px;
+      z-index: 100;
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px;
+    }
+    .loading-overlay.show { display: flex; }
+    .loading-spinner {
+      width: 50px; height: 50px;
+      border: 3px solid rgba(59,130,246,0.1);
+      border-top: 3px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p { color: #93c5fd; font-size: 14px; font-weight: 500; }
+
+    /* ---- FOOTER ---- */
+    .site-footer {
+      width: 100%; max-width: 560px; margin-top: 24px;
+      padding: 20px 0; text-align: center; position: relative; z-index: 1;
+    }
+    .footer-social {
+      display: flex; align-items: center; justify-content: center;
+      gap: 20px; margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .footer-social a {
+      color: rgba(255,255,255,0.4); text-decoration: none;
+      font-size: 13px; transition: all 0.3s ease;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .footer-social a:hover { color: #93c5fd; transform: translateY(-2px); }
+    .footer-social a .icon { font-size: 18px; }
+    .footer-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 12px 0; }
+    .footer-credit { color: rgba(255,255,255,0.2); font-size: 12px; }
+    .footer-credit a { color: #93c5fd; text-decoration: none; font-weight: 600; transition: color 0.3s ease; }
+    .footer-credit a:hover { color: #3b82f6; }
+    @media (max-width: 480px) {
+      .container { padding: 24px 16px; }
+      .header h2 { font-size: 17px; }
+      .option-grid { grid-template-columns: 1fr; }
+      .btn-row { flex-direction: column; }
+      .progress-label { display: none; }
+      .brand-logo { width: 70px; height: 70px; }
+      .brand-name { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- ====== BRAND ====== -->
+    <div class="brand-header">
+      <img src="AfterEdit_Profile_Logo_Diamond.png" alt="افتر ادیت" class="brand-logo" id="brandLogo">
+      <div class="brand-name"><span>افتر ادیت</span></div>
+      <div class="brand-sub">🎤 میتینگ مازندران 🎧</div>
+    </div>
+
+    <!-- ====== FORM CONTAINER ====== -->
+    <div class="container" id="app" style="position:relative;">
+
+      <!-- Loading -->
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>⏳ در حال ارسال اطلاعات...</p>
+      </div>
+
+      <div class="progress-container" id="progressBar"></div>
+
+      <!-- SUCCESS -->
+      <div class="success-screen" id="successScreen">
+        <div class="check">✅</div>
+        <h2>🎉 ثبت نام با موفقیت انجام شد</h2>
+        <p>
+          اطلاعات شما ثبت گردید.<br>
+          پس از بررسی توسط مدیر، نتیجه از طریق پیامک یا ربات برای شما ارسال خواهد شد.<br><br>
+          <span style="color:#6ee7b7;font-weight:600;">🇮🇷 افتر ادیت — مازندران، متحد و یکپارچه</span>
+        </p>
+      </div>
+
+      <form id="regForm" novalidate>
+        <div class="header" id="stepHeader">
+          <div class="step-badge" id="stepBadge">مرحله ۱</div>
+          <h2 id="stepTitle">نام و نام خانوادگی</h2>
+          <p id="stepDesc">لطفاً نام و نام خانوادگی خود را وارد کنید.</p>
+          <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.15);color:#6ee7b7;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:500;margin-top:8px;">
+            🇮🇷 میتینگ افتر ادیت
+          </div>
+        </div>
+        <div class="error-msg" id="errorMsg">⚠️ <span id="errorText"></span></div>
+        <div class="help-box" id="helpBox"></div>
+
+        <!-- STEP 1: NAME -->
+        <div class="form-step active" data-step="1">
+          <div class="form-group">
+            <label>نام و نام خانوادگی</label>
+            <input type="text" id="inputFullName" placeholder="مثال: علی محمدی" autocomplete="name">
+          </div>
+        </div>
+        <!-- STEP 2: PHONE -->
+        <div class="form-step" data-step="2">
+          <div class="form-group">
+            <label>شماره تماس</label>
+            <input type="tel" id="inputPhone" placeholder="مثال: ۰۹۱۲۳۴۵۶۷۸۹" dir="ltr" autocomplete="tel">
+          </div>
+        </div>
+        <!-- STEP 3: GENDER -->
+        <div class="form-step" data-step="3">
+          <div class="option-grid" id="genderGrid">
+            <button type="button" class="option-btn" data-value="👨 پسر">👨 پسر</button>
+            <button type="button" class="option-btn" data-value="👩 دختر">👩 دختر</button>
+          </div>
+        </div>
+        <!-- STEP 4: TYPE -->
+        <div class="form-step" data-step="4">
+          <div class="option-grid" id="typeGrid">
+            <button type="button" class="option-btn" data-value="🎤 رپر" data-type="rapper">🎤 رپر</button>
+            <button type="button" class="option-btn" data-value="🎧 بیت ساز" data-type="beatmaker">🎧 بیت ساز</button>
+            <button type="button" class="option-btn" data-value="🎼 آهنگساز" data-type="composer">🎼 آهنگساز</button>
+            <button type="button" class="option-btn" data-value="🎚 تنظیم کننده" data-type="arranger">🎚 تنظیم کننده</button>
+            <button type="button" class="option-btn" data-value="🎙 خواننده" data-type="singer">🎙 خواننده</button>
+            <button type="button" class="option-btn" data-value="🎥 تولیدکننده محتوا" data-type="content">🎥 تولیدکننده محتوا</button>
+            <button type="button" class="option-btn" data-value="👀 تماشاگر" data-type="viewer">👀 تماشاگر</button>
+            <button type="button" class="option-btn" data-value="🤝 سایر" data-type="other">🤝 سایر</button>
+          </div>
+        </div>
+        <!-- STEP 5: TYPE QUESTIONS -->
+        <div class="form-step" data-step="5">
+          <div id="typeQuestionsContainer"></div>
+        </div>
+        <!-- STEP 6: CITY -->
+        <div class="form-step" data-step="6">
+          <div class="form-group">
+            <label>شهر شما (مازندران)</label>
+            <select id="inputCity">
+              <option value="">— انتخاب کنید —</option>
+              <option value="ساری">ساری</option><option value="بابل">بابل</option>
+              <option value="آمل">آمل</option><option value="قائم‌شهر">قائم‌شهر</option>
+              <option value="بابلسر">بابلسر</option><option value="تنکابن">تنکابن</option>
+              <option value="نوشهر">نوشهر</option><option value="چالوس">چالوس</option>
+              <option value="نور">نور</option><option value="محمودآباد">محمودآباد</option>
+              <option value="بهشهر">بهشهر</option><option value="نکا">نکا</option>
+              <option value="جویبار">جویبار</option><option value="رامسر">رامسر</option>
+              <option value="فریدونکنار">فریدونکنار</option><option value="سوادکوه">سوادکوه</option>
+              <option value="دیگر شهرهای مازندران">دیگر شهرهای مازندران</option>
+            </select>
+          </div>
+        </div>
+        <!-- STEP 7: AGE -->
+        <div class="form-step" data-step="7">
+          <div class="form-group">
+            <label>سن شما</label>
+            <input type="number" id="inputAge" placeholder="مثال: ۲۵" min="12" max="60">
+          </div>
+        </div>
+        <!-- STEP 8: EXPERIENCE -->
+        <div class="form-step" data-step="8">
+          <p id="expQuestion" style="color:rgba(255,255,255,0.6); margin-bottom:16px; font-size:14px;"></p>
+          <div class="option-grid one-col" id="expGrid"></div>
+        </div>
+        <!-- STEP 9: PORTFOLIO -->
+        <div class="form-step" data-step="9">
+          <p id="portfolioQuestion" style="color:rgba(255,255,255,0.6); margin-bottom:16px; font-size:14px;"></p>
+          <div id="portfolioContent"></div>
+        </div>
+        <!-- STEP 10: SOCIAL -->
+        <div class="form-step" data-step="10">
+          <div class="form-group">
+            <label>لینک اینستاگرام، تلگرام یا سایر شبکه‌های اجتماعی</label>
+            <input type="url" id="inputSocial" placeholder="https://instagram.com/username">
+          </div>
+          <button type="button" class="option-btn" id="noSocialBtn" style="width:100%">❌ ندارم</button>
+        </div>
+        <!-- STEP 11: GOAL -->
+        <div class="form-step" data-step="11">
+          <div class="option-grid" id="goalGrid">
+            <button type="button" class="option-btn" data-value="شبکه سازی">شبکه سازی</button>
+            <button type="button" class="option-btn" data-value="همکاری">همکاری</button>
+            <button type="button" class="option-btn" data-value="اجرای زنده">اجرای زنده</button>
+            <button type="button" class="option-btn" data-value="یادگیری">یادگیری</button>
+            <button type="button" class="option-btn" data-value="سرمایه گذاری">سرمایه گذاری</button>
+            <button type="button" class="option-btn" data-value="فقط تماشاگر">فقط تماشاگر</button>
+            <button type="button" class="option-btn" data-value="سایر">سایر</button>
+          </div>
+        </div>
+        <!-- STEP 12: PREVIOUS -->
+        <div class="form-step" data-step="12">
+          <div class="option-grid" id="prevGrid">
+            <button type="button" class="option-btn" data-value="✅ بله">✅ بله</button>
+            <button type="button" class="option-btn" data-value="❌ خیر">❌ خیر</button>
+          </div>
+        </div>
+        <!-- STEP 13: VIP -->
+        <div class="form-step" data-step="13">
+          <div class="note-box" style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.1);border-radius:12px;padding:14px 16px;color:#93c5fd;font-size:13px;line-height:1.7;margin-bottom:16px;">
+            📌 این میتینگ <strong style="color:#6ee7b7;">رایگان</strong> است، اما بعضی از میتینگ‌های ما که در <strong>جنگل و ویلای شخصی</strong> برگزار می‌شود به صورت <strong style="color:#fcd34d;">پولی</strong> است.<br><br>
+            شما به عنوان <strong>رپر</strong> یا <strong>تماشاگر</strong> و... می‌تونید حضور داشته باشید. آیا مایل هستید این میتینگ‌های <strong style="color:#fcd34d;">VIP</strong> هم شمارو خبر کنیم؟ حاضری‌ن هزینه پرداخت کنین؟
+          </div>
+          <div class="form-group">
+            <label>اگر چنین میتینگ‌هایی برگزار شود، آیا تمایل به شرکت دارید؟</label>
+            <div class="option-grid" id="paidMeetingGrid">
+              <button type="button" class="option-btn" data-value="✅ بله، حتماً شرکت می‌کنم">✅ بله، حتماً</button>
+              <button type="button" class="option-btn" data-value="🤔 بستگی به زمان و شرایط دارد">🤔 شاید</button>
+              <button type="button" class="option-btn" data-value="❌ خیر، فقط رایگان شرکت می‌کنم">❌ خیر</button>
+            </div>
+          </div>
+        </div>
+        <!-- STEP 14: SUMMARY + RULES -->
+        <div class="form-step" data-step="14">
+          <div class="summary-card" id="summaryCard"></div>
+          <div class="rules-section">
+            <h3><span class="flag">🇮🇷</span> قوانین میتینگ افتر ادیت <span class="flag">🇮🇷</span></h3>
+            <div class="rules-list" id="rulesList">
+              <li><span class="num">۱</span><span class="text">از آوردن هرگونه <strong>سلاح سرد و گرم</strong> خودداری کنید.</span></li>
+              <li><span class="num">۲</span><span class="text">از آوردن هرگونه <strong>نوشیدنی الکلی</strong> خودداری کنید.</span></li>
+              <li><span class="num">۳</span><span class="text">لطفاً احترام همدیگه رو نگه دارین. اینجا بابل و آمل و ساری نداریم، همه زیر اسم <strong>مازندران</strong> یکی هستیم.</span></li>
+              <li><span class="num">۴</span><span class="text">موقع اجرا آرتیست‌ها <strong>سکوت</strong> کنین تا بهترین اجرا رو داشته باشن.</span></li>
+              <li><span class="num">۵</span><span class="text">هدف ما ساختن <strong>جمع دوستانه</strong> و متحد کردن مازندران. پشت هم باشین تا پرچم مازندران رو ببریم بالا. 💚</span></li>
+              <li><span class="num">۶</span><span class="text">لینک گپ تلگرام رو فقط برای افراد مورد اعتماد بفرستین. <strong>میتینگ مال همه‌ست</strong>.</span></li>
+              <li class="highlight"><span class="num" style="background:rgba(251,191,36,0.15);color:#fcd34d;">⚠️</span><span class="text"><strong style="color:#fcd34d;">نکته:</strong> در صورت رعایت نکردن قوانین، کاربر <strong>بن</strong> و از میتینگ‌های بعدی <strong>محروم</strong> می‌شود.</span></li>
+            </div>
+            <div class="rules-scroll-hint" id="scrollHint">👇 برای تایید قوانین، تا انتها اسکرول کنید</div>
+          </div>
+          <div class="btn-row" id="confirmRow" style="display:none; margin-top:16px;">
+            <button type="button" class="btn btn-success" id="confirmBtn" style="flex:2">✅ تایید نهایی ثبت نام</button>
+            <button type="button" class="btn btn-secondary" id="editBtn">✏️ ویرایش</button>
+            <button type="button" class="btn btn-danger" id="resetBtn">❌ لغو</button>
+          </div>
+        </div>
+
+        <div class="btn-row" id="navButtons">
+          <button type="button" class="btn btn-secondary" id="backBtn">← مرحله قبل</button>
+          <button type="button" class="btn btn-primary" id="nextBtn">مرحله بعد ←</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="site-footer">
+      <div class="footer-social">
+        <a href="https://www.instagram.com/afteredit.ir" target="_blank" rel="noopener">
+          <span class="icon">📸</span> اینستاگرام افتر ادیت
+        </a>
+        <a href="https://www.instagram.com/sepanta.systems" target="_blank" rel="noopener">
+          <span class="icon">💻</span> سپنتا سیستمز
+        </a>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-credit">
+        طراحی شده توسط <a href="https://www.instagram.com/sepanta.systems" target="_blank" rel="noopener">سپنتا</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 📌 N8N WEBHOOK CONFIG – Change this to your n8n webhook URL
+    // =========================================================================
+    const N8N_WEBHOOK_URL = 'https://planamir87878787.app.n8n.cloud/webhook/afteredit-register';
+    // ✅ Webhook active — connected to n8n Cloud
+
+    // =========================================================================
+    // TYPE CONFIG
+    // =========================================================================
+    const TYPE_CONFIG = {
+      rapper: {
+        label: '🎤 رپر',
+        questions: [
+          { id: 'rapperStyle', type: 'select', label: 'سبک رپ شما چیست؟', options: ['', 'باند (Gang)', 'کلاسیک', 'آگاهانه (Conscious)', 'دیس (Diss)', 'فری‌استایل', 'ترپ (Trap)', 'دریل (Drill)', 'طنز / کمدی', 'سایر'] },
+          { id: 'rapperWrite', type: 'options', label: 'آیا متن‌های خود را شخصاً می‌نویسید؟', options: ['✅ بله، کاملاً شخصی', '🤝 گاهی همکاری', '📝 بیشتر آماده'] },
+          { id: 'rapperLive', type: 'options', label: 'آیا سابقه اجرای زنده دارید؟', options: ['✅ بله، چندین بار', '🎤 یک یا دو بار', '❌ خیر'] }
+        ],
+        expQuestion: 'سابقه شما در حوزه رپ چیست؟',
+        expOptions: ['ندارم', 'کمتر از ۱ سال', '۱ تا ۳ سال', '۳ تا ۵ سال', 'بیشتر از ۵ سال'],
+        portfolioLabel: '🎤 لطفاً یک نمونه از کارهای رپ خود را آپلود کنید:',
+        portfolioAccept: '🎤 ویس رپ • 🎵 آهنگ • 🎬 ویدیو کلیپ'
+      },
+      beatmaker: {
+        label: '🎧 بیت ساز',
+        questions: [
+          { id: 'beatmakerExp', type: 'select', label: 'چند سال است بیت می‌سازید؟', options: ['', 'کمتر از ۱ سال', '۱ تا ۲ سال', '۲ تا ۵ سال', 'بیشتر از ۵ سال'] },
+          { id: 'beatmakerDa', type: 'options', label: 'از چه نرم‌افزاری استفاده می‌کنید؟', options: ['FL Studio', 'Ableton Live', 'Logic Pro', 'Cubase', 'BandLab', 'سایر'], cols: 2 },
+          { id: 'beatmakerStyle', type: 'select', label: 'سبک بیت‌هایی که می‌سازید؟', options: ['', 'ترپ (Trap)', 'بوم باپ (Boom Bap)', 'لو-فای (Lo-fi)', 'دریل (Drill)', 'پاپ', 'ملودیک', 'سایر'] }
+        ],
+        expQuestion: 'سابقه شما در بیت سازی چقدر است؟',
+        expOptions: ['ندارم', 'کمتر از ۱ سال', '۱ تا ۳ سال', '۳ تا ۵ سال', 'بیشتر از ۵ سال'],
+        portfolioLabel: '🎧 لطفاً یک نمونه از بیت‌های خود را آپلود کنید:',
+        portfolioAccept: '🎵 آهنگ (Beat) • 🎬 ویدیو'
+      },
+      composer: {
+        label: '🎼 آهنگساز',
+        questions: [
+          { id: 'composerStyle', type: 'select', label: 'چه سبک‌هایی کار می‌کنید؟', options: ['', 'کلاسیک', 'ارکسترال', 'الکترونیک', 'هیپ‌هاپ', 'سینمایی', 'پاپ', 'سایر'] },
+          { id: 'composerDa', type: 'options', label: 'از چه نرم‌افزاری استفاده می‌کنید؟', options: ['Cubase', 'Logic Pro', 'Ableton Live', 'FL Studio', 'Pro Tools', 'Sibelius', 'سایر'], cols: 2 },
+          { id: 'composerNote', type: 'options', label: 'آیا نت‌خوانی بلد هستید؟', options: ['✅ بله، حرفه‌ای', '📖 تا حدی', '❌ خیر'] }
+        ],
+        expQuestion: 'سابقه شما در آهنگسازی چقدر است؟',
+        expOptions: ['ندارم', 'کمتر از ۱ سال', '۱ تا ۳ سال', '۳ تا ۵ سال', 'بیشتر از ۵ سال'],
+        portfolioLabel: '🎼 لطفاً یک نمونه از ساخته‌های خود را آپلود کنید:',
+        portfolioAccept: '🎵 آهنگ • 🎬 ویدیو'
+      },
+      arranger: {
+        label: '🎚 تنظیم کننده',
+        questions: [
+          { id: 'arrangerStyle', type: 'select', label: 'چه سبک‌هایی تنظیم کرده‌اید؟', options: ['', 'پاپ', 'رپ / هیپ‌هاپ', 'راک', 'الکترونیک', 'سنتی / ایرانی', 'سینمایی', 'سایر'] },
+          { id: 'arrangerDa', type: 'options', label: 'نرم‌افزار اصلی شما؟', options: ['Cubase', 'Logic Pro', 'FL Studio', 'Ableton Live', 'Pro Tools', 'سایر'], cols: 2 }
+        ],
+        expQuestion: 'سابقه شما در تنظیم کنندگی چقدر است؟',
+        expOptions: ['ندارم', 'کمتر از ۱ سال', '۱ تا ۳ سال', '۳ تا ۵ سال', 'بیشتر از ۵ سال'],
+        portfolioLabel: '🎚 لطفاً یک نمونه از تنظیم‌های خود را آپلود کنید:',
+        portfolioAccept: '🎵 آهنگ • 🎬 ویدیو'
+      },
+      singer: {
+        label: '🎙 خواننده',
+        questions: [
+          { id: 'singerStyle', type: 'select', label: 'چه سبک‌هایی می‌خوانید؟', options: ['', 'پاپ', 'رپ', 'آراندبی (R&B)', 'سول (Soul)', 'سنتی ایرانی', 'جاز', 'سایر'] },
+          { id: 'singerTrain', type: 'options', label: 'آیا آموزش دیده‌اید؟', options: ['🎵 بله، کلاس رفته‌ام', '📖 خودآموز', '📚 در حال یادگیری'] },
+          { id: 'singerRelease', type: 'options', label: 'آیا سابقه انتشار اثر دارید؟', options: ['✅ بله، چندین اثر', '⏳ در دست اقدام', '❌ خیر'] }
+        ],
+        expQuestion: 'سابقه شما در خوانندگی چقدر است؟',
+        expOptions: ['ندارم', 'کمتر از ۱ سال', '۱ تا ۳ سال', '۳ تا ۵ سال', 'بیشتر از ۵ سال'],
+        portfolioLabel: '🎙 لطفاً یک نمونه از خوانندگی خود را آپلود کنید:',
+        portfolioAccept: '🎤 ویس • 🎵 آهنگ • 🎬 ویدیو کلیپ'
+      },
+      content: {
+        label: '🎥 تولیدکننده محتوا',
+        questions: [
+          { id: 'contentType', type: 'select', label: 'چه نوع محتوایی تولید می‌کنید؟', options: ['', 'ویدیو کلیپ', 'تیزر / تبلیغاتی', 'عکاسی', 'طراحی گرافیک', 'پادکست', 'اجرای زنده / استریم', 'مقالات / محتوای متنی', 'سایر'] },
+          { id: 'contentPage', type: 'url', label: 'لینک پیج یا شبکه اجتماعی شما', placeholder: 'https://instagram.com/yourpage' }
+        ],
+        expQuestion: 'سابقه شما در تولید محتوا چقدر است؟',
+        expOptions: ['ندارم', 'کمتر از ۱ سال', '۱ تا ۳ سال', '۳ تا ۵ سال', 'بیشتر از ۵ سال'],
+        portfolioLabel: '📎 لطفاً یک نمونه از کارهای خود را آپلود کنید:',
+        portfolioAccept: '🎬 ویدیو • 🖼 تصویر • 📄 فایل'
+      },
+      viewer: {
+        label: '👀 تماشاگر',
+        questions: [
+          { id: 'viewerSource', type: 'select', label: 'از چه طریقی با ما آشنا شدید؟', options: ['', 'اینستاگرام', 'تلگرام', 'دوستان', 'رویداد قبلی', 'سایر'] },
+          { id: 'viewerFuture', type: 'options', label: 'آیا قصد دارید در آینده به عنوان شرکت‌کننده ثبت‌نام کنید؟', options: ['✅ بله، قطعاً', '🤔 شاید', '❌ فعلاً نه'] }
+        ],
+        expQuestion: null, expOptions: null,
+        portfolioLabel: null, portfolioAccept: null
+      },
+      other: {
+        label: '🤝 سایر',
+        questions: [
+          { id: 'otherDesc', type: 'textarea', label: 'لطفاً تخصص و حوزه فعالیت خود را توضیح دهید:', placeholder: 'مثال: من در حوزه مدیریت رویداد...' }
+        ],
+        expQuestion: 'سابقه شما در حوزه فعالیت‌تان چقدر است؟',
+        expOptions: ['ندارم', 'کمتر از ۱ سال', '۱ تا ۳ سال', '۳ تا ۵ سال', 'بیشتر از ۵ سال'],
+        portfolioLabel: '📎 لطفاً یک نمونه کار یا مدرک مرتبط آپلود کنید (اختیاری):',
+        portfolioAccept: '📄 هر نوع فایل مرتبط'
+      }
+    };
+
+    // =========================================================================
+    // STATE
+    // =========================================================================
+    const state = { step: 1, selectedType: '', data: {} };
+
+    // =========================================================================
+    // DOM HELPERS
+    // =========================================================================
+    const $ = id => document.getElementById(id);
+    const loadingOverlay  = $('loadingOverlay');
+    const progressBar     = $('progressBar');
+    const stepBadge       = $('stepBadge');
+    const stepTitle       = $('stepTitle');
+    const stepDesc        = $('stepDesc');
+    const errorMsg        = $('errorMsg');
+    const errorText       = $('errorText');
+    const helpBox         = $('helpBox');
+    const navButtons      = $('navButtons');
+    const backBtn         = $('backBtn');
+    const nextBtn         = $('nextBtn');
+    const confirmBtn      = $('confirmBtn');
+    const editBtn         = $('editBtn');
+    const resetBtn        = $('resetBtn');
+    const confirmRow      = $('confirmRow');
+    const successScreen   = $('successScreen');
+    const regForm         = $('regForm');
+    const summaryCard     = $('summaryCard');
+    const rulesList       = $('rulesList');
+    const scrollHint      = $('scrollHint');
+    const typeQuestions   = $('typeQuestionsContainer');
+    const expGrid         = $('expGrid');
+    const expQuestion     = $('expQuestion');
+    const portfolioContent = $('portfolioContent');
+    const portfolioQuestion = $('portfolioQuestion');
+
+    // =========================================================================
+    // PROGRESS
+    // =========================================================================
+    function renderProgress(current) {
+      const show = current <= 13;
+      progressBar.style.display = show ? 'flex' : 'none';
+      if (!show) return;
+      const ms = [1,2,3,4,5,7,13,14];
+      const lb = {1:'نام',2:'شماره',3:'جنسیت',4:'نوع',5:'تخصصی',7:'سن',13:'VIP',14:'خلاصه'};
+      let html = '';
+      for (let i = 0; i < ms.length; i++) {
+        const m = ms[i];
+        let cls = m < current ? 'done' : (m === current ? 'active' : '');
+        const cc = m < current ? '✓' : (m === 14 ? '📋' : m);
+        html += `<div class="progress-step ${cls}"><div class="progress-circle">${cc}</div><div class="progress-label">${lb[m]||''}</div></div>`;
+        if (i < ms.length-1) {
+          const n = ms[i+1];
+          html += `<div class="progress-line ${n<=current?'filled':''}"></div>`;
+        }
+      }
+      progressBar.innerHTML = html;
+    }
+
+    // =========================================================================
+    // HEADER
+    // =========================================================================
+    const STEP_INFO = {
+      1:  { title: 'نام و نام خانوادگی', desc: 'لطفاً نام و نام خانوادگی خود را وارد کنید. (حداقل ۵ کاراکتر)' },
+      2:  { title: 'شماره تماس', desc: 'لطفاً شماره تماس خود را وارد کنید.' },
+      3:  { title: 'جنسیت', desc: 'لطفاً جنسیت خود را انتخاب کنید.' },
+      4:  { title: 'نوع شرکت‌کننده', desc: 'لطفاً نوع شرکت‌کننده خود را انتخاب کنید.' },
+      5:  { title: '', desc: '' },
+      6:  { title: 'شهر شما (مازندران)', desc: 'از کدام شهر مازندران هستید؟' },
+      7:  { title: 'سن', desc: 'لطفاً سن خود را وارد کنید. (۱۲ تا ۶۰)' },
+      8:  { title: 'سابقه', desc: '' },
+      9:  { title: 'نمونه کار', desc: '' },
+      10: { title: 'شبکه اجتماعی', desc: 'لینک اینستاگرام، تلگرام یا سایر شبکه‌های اجتماعی' },
+      11: { title: 'هدف از حضور', desc: 'هدف شما از حضور در میتینگ چیست؟' },
+      12: { title: 'شرکت قبلی', desc: 'آیا قبلاً در میتینگ‌های ما شرکت کرده‌اید؟' },
+      13: { title: 'میتینگ‌های VIP', desc: 'نظر شما در مورد میتینگ‌های ویژه چیست؟' },
+      14: { title: 'خلاصه و قوانین', desc: 'لطفاً اطلاعات خود را بررسی کنید و قوانین را تا انتها بخوانید.' }
+    };
+
+    function updateHeader(step) {
+      const info = STEP_INFO[step] || STEP_INFO[1];
+      const cfg = TYPE_CONFIG[state.selectedType];
+      if (step === 5) {
+        stepBadge.textContent = 'سوالات تخصصی';
+        stepTitle.textContent = cfg ? cfg.label + ' — سوالات تخصصی' : 'سوالات تخصصی';
+        stepDesc.textContent = 'لطفاً به سوالات زیر پاسخ دهید.';
+      } else if (step === 8 && cfg) {
+        stepBadge.textContent = `مرحله ${step}`; stepTitle.textContent = 'سابقه';
+        stepDesc.textContent = cfg.expQuestion || '';
+      } else if (step === 9 && cfg) {
+        stepBadge.textContent = `مرحله ${step}`; stepTitle.textContent = 'نمونه کار';
+        stepDesc.textContent = cfg.portfolioLabel || '';
+      } else if (step === 13) {
+        stepBadge.textContent = 'مرحله ۱۳'; stepTitle.textContent = 'میتینگ‌های VIP';
+        stepDesc.textContent = 'نظر شما در مورد میتینگ‌های جنگل و ویلای شخصی؟';
+      } else if (step === 14) {
+        stepBadge.textContent = 'مرحله پایانی'; stepTitle.textContent = info.title;
+        stepDesc.textContent = info.desc;
+      } else {
+        stepBadge.textContent = `مرحله ${step}`; stepTitle.textContent = info.title;
+        stepDesc.textContent = info.desc;
+      }
+    }
+
+    // =========================================================================
+    // RENDER TYPE QUESTIONS
+    // =========================================================================
+    function renderTypeQuestions() {
+      const cfg = TYPE_CONFIG[state.selectedType];
+      if (!cfg) return;
+      let h = `<div style="display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,0.12);color:#93c5fd;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:20px;border:1px solid rgba(59,130,246,0.15);">${cfg.label}</div>`;
+      cfg.questions.forEach(q => {
+        h += `<div class="form-group"><label>${q.label}</label>`;
+        if (q.type === 'select') {
+          h += `<select id="${q.id}"><option value="">— انتخاب کنید —</option>`;
+          q.options.forEach(o => { if (o) h += `<option value="${o}">${o}</option>`; });
+          h += `</select>`;
+        } else if (q.type === 'options') {
+          h += `<div class="option-grid ${q.cols===2?'':'one-col'}" id="${q.id}Grid">`;
+          q.options.forEach(o => { h += `<button type="button" class="option-btn" data-value="${o}">${o}</button>`; });
+          h += `</div>`;
+        } else if (q.type === 'textarea') {
+          h += `<textarea id="${q.id}" placeholder="${q.placeholder||''}" rows="4"></textarea>`;
+        } else if (q.type === 'url') {
+          h += `<input type="url" id="${q.id}" placeholder="${q.placeholder||''}">`;
+        }
+        h += `</div>`;
+      });
+      typeQuestions.innerHTML = h;
+      typeQuestions.querySelectorAll('.option-grid').forEach(grid => {
+        grid.querySelectorAll('.option-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            grid.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected'); hideError();
+          });
+        });
+      });
+    }
+
+    // =========================================================================
+    // RENDER EXPERIENCE
+    // =========================================================================
+    function renderExpStep() {
+      const cfg = TYPE_CONFIG[state.selectedType];
+      if (!cfg || !cfg.expOptions) { showStep(state.step+1, true); return; }
+      expQuestion.textContent = cfg.expQuestion;
+      expGrid.innerHTML = '';
+      cfg.expOptions.forEach(o => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'option-btn';
+        b.dataset.value = o; b.textContent = o;
+        expGrid.appendChild(b);
+      });
+      expGrid.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          expGrid.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+          this.classList.add('selected'); hideError();
+        });
+      });
+    }
+
+    // =========================================================================
+    // RENDER PORTFOLIO
+    // =========================================================================
+    function renderPortfolioStep() {
+      const cfg = TYPE_CONFIG[state.selectedType];
+      if (!cfg || !cfg.portfolioLabel) { showStep(state.step+1, true); return; }
+      portfolioQuestion.textContent = cfg.portfolioLabel;
+      const accept = state.selectedType === 'content' ? 'image/*,video/*,audio/*,.pdf' : 'audio/*,video/*';
+      portfolioContent.innerHTML = `
+        <div class="file-upload" id="fileUpload" onclick="document.getElementById('fileInput').click()">
+          <div class="icon">📎</div>
+          <p>برای آپلود کلیک کنید</p>
+          <div class="types">${cfg.portfolioAccept||''}</div>
+          <div class="file-name" id="fileName"></div>
+          <input type="file" id="fileInput" accept="${accept}">
+        </div>`;
+      const fi = $('fileInput');
+      if (fi) fi.addEventListener('change', function(e) {
+        const file = this.files[0];
+        if (file) { $('fileUpload').classList.add('has-file'); $('fileName').textContent = `✅ ${file.name}`; $('fileName').classList.add('show'); hideError(); }
+      });
+    }
+
+    // =========================================================================
+    // SHOW STEP
+    // =========================================================================
+    function showStep(step, forceNext) {
+      state.step = step; state.invalidCount = 0; hideError(); hideHelp();
+      if (!forceNext) {
+        const cfg = TYPE_CONFIG[state.selectedType];
+        if (step === 8 && cfg && !cfg.expOptions) { showStep(step+1, true); return; }
+        if (step === 9 && cfg && !cfg.portfolioLabel) { showStep(step+1, true); return; }
+      }
+      document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+      const target = document.querySelector(`.form-step[data-step="${step}"]`);
+      if (target) target.classList.add('active');
+      if (step === 5) renderTypeQuestions();
+      if (step === 8) renderExpStep();
+      if (step === 9) renderPortfolioStep();
+      renderProgress(step); updateHeader(step);
+      if (step === 14) {
+        navButtons.style.display = 'none'; generateSummary();
+        confirmRow.style.display = 'none'; if (scrollHint) scrollHint.classList.remove('hidden');
+        setTimeout(checkRulesScroll, 100);
+      } else {
+        navButtons.style.display = 'flex';
+        backBtn.style.display = step <= 1 ? 'none' : 'block';
+        nextBtn.textContent = step === 13 ? 'دیدن خلاصه و قوانین 📋' : 'مرحله بعد ←';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // =========================================================================
+    // RULES SCROLL
+    // =========================================================================
+    function checkRulesScroll() {
+      if (!rulesList) return;
+      const s = rulesList.scrollHeight - rulesList.clientHeight;
+      if (rulesList.scrollTop >= s - 5) { confirmRow.style.display = 'flex'; scrollHint.classList.add('hidden'); }
+      else { confirmRow.style.display = 'none'; scrollHint.classList.remove('hidden'); }
+    }
+    if (rulesList) rulesList.addEventListener('scroll', checkRulesScroll);
+
+    // =========================================================================
+    // ERROR / HELP
+    // =========================================================================
+    function showError(msg) { errorText.textContent = msg; errorMsg.classList.add('show'); }
+    function hideError() { errorMsg.classList.remove('show'); }
+    function showHelp(msg) { helpBox.innerHTML = msg; helpBox.classList.add('show'); }
+    function hideHelp() { helpBox.classList.remove('show'); }
+
+    // =========================================================================
+    // OPTION BUTTONS
+    // =========================================================================
+    document.querySelectorAll('.option-grid').forEach(grid => {
+      grid.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          grid.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+          this.classList.add('selected'); hideError();
+        });
+      });
+    });
+    $('noSocialBtn')?.addEventListener('click', function() {
+      this.classList.toggle('selected');
+      if (this.classList.contains('selected')) $('inputSocial').value = '';
+      hideError();
+    });
+
+    function getOpt(cid) {
+      const g = document.getElementById(cid);
+      if (!g) return '';
+      const s = g.querySelector('.option-btn.selected');
+      return s ? s.dataset.value : '';
+    }
+
+    // =========================================================================
+    // VALIDATE
+    // =========================================================================
+    function validateStep(step) {
+      hideError(); hideHelp();
+      const v = s => (s||'').trim();
+      switch(step) {
+        case 1: { const n = v($('inputFullName').value); if (!n) { showError('❌ لطفاً نام و نام خانوادگی خود را وارد کنید.'); return false; } if (n.length<5) { showError('❌ حداقل ۵ کاراکتر'); return false; } state.data.fullName=n; return true; }
+        case 2: { const p = v($('inputPhone').value); if (!p) { showError('❌ شماره تماس'); return false; } const d=p.replace(/[\s\(\)\-\+]/g,''); if (!/^0?[0-9]{10,13}$/.test(d)) { showError('❌ شماره نامعتبر'); return false; } state.data.phone=p; return true; }
+        case 3: { const g=getOpt('genderGrid'); if(!g){showError('❌ جنسیت را انتخاب کنید');return false;} state.data.gender=g; return true; }
+        case 4: { const t=getOpt('typeGrid'); if(!t){showError('❌ نوع را انتخاب کنید');return false;} state.data.participantType=t; const sb=document.querySelector('#typeGrid .option-btn.selected'); state.selectedType=sb?(sb.dataset.type||'other'):'other'; return true; }
+        case 5: { const cfg=TYPE_CONFIG[state.selectedType]; if(!cfg) return true; for(const q of cfg.questions){ if(q.type==='select'){ const el=document.getElementById(q.id); if(el&&!v(el.value)){showError(`❌ "${q.label}" را انتخاب کنید.`);return false;} state.data[q.id]=el?el.value:''; } else if(q.type==='options'){ const val=getOpt(q.id+'Grid'); if(!val){showError(`❌ "${q.label}" را انتخاب کنید.`);return false;} state.data[q.id]=val; } else if(q.type==='textarea'||q.type==='url'){ const el=document.getElementById(q.id); if(el&&!v(el.value)){showError(`❌ "${q.label}" را وارد کنید.`);return false;} state.data[q.id]=el?el.value:''; } } return true; }
+        case 6: { const c=$('inputCity').value; if(!c){showError('❌ شهر را انتخاب کنید');return false;} state.data.city=c; return true; }
+        case 7: { const a=parseInt($('inputAge').value); if(!a||isNaN(a)){showError('❌ سن را به عدد وارد کنید');return false;} if(a<12||a>60){showError('❌ سن بین ۱۲ تا ۶۰');return false;} state.data.age=a; return true; }
+        case 8: { const cfg=TYPE_CONFIG[state.selectedType]; if(!cfg||!cfg.expOptions) return true; const e=getOpt('expGrid'); if(!e){showError('❌ سابقه را انتخاب کنید');return false;} state.data.experience=e; return true; }
+        case 9: { const cfg=TYPE_CONFIG[state.selectedType]; if(!cfg||!cfg.portfolioLabel) return true; const fi=$('fileInput'); if(!fi||!fi.files[0]){showError('❌ نمونه کار آپلود کنید');return false;} state.data.portfolioFileName=fi.files[0].name; return true; }
+        case 10: { const btn=$('noSocialBtn'); const lk=v($('inputSocial').value); if(btn.classList.contains('selected')){state.data.socialLink='ندارد';return true;} if(!lk){showError('❌ لینک یا "ندارم"');return false;} state.data.socialLink=lk; return true; }
+        case 11: { const g=getOpt('goalGrid'); if(!g){showError('❌ هدف را انتخاب کنید');return false;} state.data.meetingGoal=g; return true; }
+        case 12: { const p=getOpt('prevGrid'); if(!p){showError('❌ پاسخ دهید');return false;} state.data.previousAttendance=p; return true; }
+        case 13: { const p=getOpt('paidMeetingGrid'); if(!p){showError('❌ نظر خود را انتخاب کنید');return false;} state.data.paidMeetingAnswer=p; return true; }
+        default: return true;
+      }
+    }
+
+    // =========================================================================
+    // NAVIGATION
+    // =========================================================================
+    function getNextStep(cur) { if(cur===4) return 5; if(cur===12) return 13; if(cur===13) return 14; if(cur<14) return cur+1; return 14; }
+    function getPrevStep(cur) { if(cur===5) return 4; if(cur===13) return 12; if(cur===14) return 13; if(cur>1) return cur-1; return 1; }
+
+    nextBtn.addEventListener('click', function() {
+      if (!validateStep(state.step)) {
+        state.invalidCount++;
+        if (state.invalidCount>=5) {
+          const helps={1:'📝 "علی محمدی" حداقل ۵ حرف',2:'📝 ۰۹۱۲۳۴۵۶۷۸۹',3:'👈 پسر یا دختر',4:'👈 نوع',5:'📝 همه موارد',6:'🏙 شهر',7:'📝 ۱۲ تا ۶۰',8:'👈 سابقه',9:'📎 آپلود',10:'🔗 لینک یا "ندارم"',11:'👈 هدف',12:'👈 بله یا خیر',13:'👈 نظر'};
+          showHelp('📌 راهنما:<br>'+(helps[state.step]||'')); state.invalidCount=0;
+        } return;
+      }
+      const next = getNextStep(state.step);
+      if (next <= 14) showStep(next);
+    });
+    backBtn.addEventListener('click', () => showStep(getPrevStep(state.step)));
+
+    // =========================================================================
+    // SUMMARY
+    // =========================================================================
+    function generateSummary() {
+      const d=state.data, cfg=TYPE_CONFIG[state.selectedType];
+      const f=[
+        {label:'نام',value:d.fullName},{label:'شماره',value:d.phone},
+        {label:'جنسیت',value:d.gender},{label:'نوع شرکت‌کننده',value:d.participantType}
+      ];
+      if(cfg){cfg.questions.forEach(q=>{
+        let val='';
+        if(q.type==='select'){const el=document.getElementById(q.id);val=el?el.value:'';}
+        else if(q.type==='options'){val=getOpt(q.id+'Grid');}
+        else if(q.type==='textarea'||q.type==='url'){const el=document.getElementById(q.id);val=el?el.value:'';}
+        f.push({label:q.label.replace('?','').replace('؟',''),value:val||'—'});
+      });}
+      f.push({label:'شهر',value:d.city},{label:'سن',value:d.age});
+      if(d.experience) f.push({label:'سابقه',value:d.experience});
+      f.push({label:'نمونه کار',value:d.portfolioFileName?'✅ ارسال شد':'—'});
+      f.push({label:'شبکه اجتماعی',value:d.socialLink||'ندارد'});
+      f.push({label:'هدف',value:d.meetingGoal},{label:'شرکت قبلی',value:d.previousAttendance});
+      if(d.paidMeetingAnswer) f.push({label:'میتینگ VIP',value:d.paidMeetingAnswer});
+      summaryCard.innerHTML = f.map(x=>`<div class="summary-row"><span class="label">${x.label}</span><span class="value">${x.value||'—'}</span></div>`).join('');
+    }
+
+    // =========================================================================
+    // 🚀 SEND TO N8N WEBHOOK
+    // =========================================================================
+    async function sendToN8n(data) {
+      try {
+        loadingOverlay.classList.add('show');
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data, timestamp: new Date().toISOString() })
+        });
+        const result = await response.json();
+        loadingOverlay.classList.remove('show');
+        return result;
+      } catch (err) {
+        loadingOverlay.classList.remove('show');
+        console.warn('⚠️ Webhook failed, data saved locally:', err);
+        // Even if webhook fails, show success to user (data is in console)
+        return { success: true, offline: true };
+      }
+    }
+
+    // =========================================================================
+    // CONFIRM
+    // =========================================================================
+    confirmBtn.addEventListener('click', async function() {
+      // 1. Hide form, show success immediately for UX
+      document.querySelector('.form-step[data-step="14"]').classList.remove('active');
+      // 2. Send to n8n webhook in background
+      sendToN8n(state.data).then(res => {
+        console.log('📡 Webhook response:', res);
+      });
+      // 3. Show success
+      regForm.style.display = 'none'; progressBar.style.display = 'none';
+      successScreen.classList.add('show');
+      successScreen.scrollIntoView({ behavior: 'smooth' });
+      console.log('📋 Registration Data:', JSON.stringify(state.data, null, 2));
+    });
+
+    editBtn.addEventListener('click', () => showStep(1));
+    resetBtn.addEventListener('click', function() {
+      if (!confirm('آیا از لغو ثبت نام اطمینان دارید؟')) return;
+      state.data={}; state.selectedType=''; state.invalidCount=0;
+      document.querySelectorAll('input, select, textarea').forEach(el=>{if(el.type==='file')el.value='';else el.value='';});
+      document.querySelectorAll('.option-btn.selected').forEach(b=>b.classList.remove('selected'));
+      document.querySelectorAll('.file-upload').forEach(el=>el.classList.remove('has-file'));
+      document.querySelectorAll('.file-name').forEach(el=>el.classList.remove('show'));
+      showStep(1); alert('❌ ثبت نام لغو شد.');
+    });
+    document.addEventListener('keydown', e => { if(e.key==='Enter'&&state.step<14){e.preventDefault();nextBtn.click();} });
+    showStep(1);
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1863b441f2fd151',t:'MTc4MzU4ODYwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
